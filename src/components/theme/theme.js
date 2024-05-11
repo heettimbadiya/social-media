@@ -4,7 +4,8 @@ const theme = createTheme({
     fontFamily: "Poppins, Arial, sans-serif",
   },
   palette: {
-   green :"red"
+    white: "#ffff",
+    black:"#000"
   },
 });
 export default theme;
