@@ -12,9 +12,11 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 import logo from "../../assets/images/Login/download.png";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 function LoginFrom() {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const initialValues = {
     user_name: "",
@@ -34,8 +36,9 @@ function LoginFrom() {
         const userData = response.data.data;
         const authToken = response.data.token;
         localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("token", authToken);
+        localStorage.setItem("token", JSON.stringify(authToken));
         action.resetForm();
+        navigate("/");
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

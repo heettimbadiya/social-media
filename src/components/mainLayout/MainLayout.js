@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import {  styled, useTheme } from "@mui/material";
+import { styled, useTheme } from "@mui/material";
 import Sidebar from "../sidebar/Sidebar";
 import { Route, Routes } from "react-router-dom";
 import Home from "../../pages/Home";
@@ -9,11 +9,11 @@ import Toolbar from "@mui/material/Toolbar";
 import Header from "../../components/sidebar/Header";
 
 export default function MainLayout() {
-    const drawerWidth = 300;
+  const drawerWidth = 300;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [open, setOpen] = useState(true);
-const theme= useTheme()
+  const theme = useTheme();
   const handleDrawerClose = () => {
     setIsClosing(true);
     setMobileOpen(false);
@@ -27,22 +27,22 @@ const theme= useTheme()
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
     }
-    };
-    
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  transition: theme.transitions.create(["margin", "width"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
+  };
+
+  const AppBar = styled(MuiAppBar, {
+    shouldForwardProp: (prop) => prop !== "open",
+  })(({ theme, open }) => ({
     transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
     }),
-  }),
-}));
+    ...(open && {
+      transition: theme.transitions.create(["margin", "width"], {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    }),
+  }));
   const Main = styled("main", {
     shouldForwardProp: (prop) => prop !== "open",
   })(({ theme, open }) => ({
