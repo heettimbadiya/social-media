@@ -7,6 +7,7 @@ const theme = createTheme({
     grayBack: "#EFEFEF",
     darkGrayBack: "#DBDBDB",
     black: "#000",
+    white: "#ffff"
   },
 });
 export default theme;
