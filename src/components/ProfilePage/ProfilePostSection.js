@@ -29,7 +29,6 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
 const ProfilePostSection = () => {
   const theme = useTheme();
   const loginUser = JSON.parse(localStorage.getItem("token"));
@@ -37,7 +36,6 @@ const ProfilePostSection = () => {
   const [file, setFile] = useState();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   const fileInputRef = useRef(null);
   const handleImageClick = () => {
     fileInputRef.current.click();
@@ -46,12 +44,10 @@ const ProfilePostSection = () => {
     const file = event.target.files[0];
     setFile(file);
   };
-
   const initialValues = {
     description: "",
     caption: "",
   };
-
   const validationSchema = object({
     caption: string().required("Title is required"),
     description: string().required("Description is required"),
@@ -64,9 +60,7 @@ const ProfilePostSection = () => {
       formData.append("caption", values.caption);
       formData.append("description", values.description);
       // Add more fields as needed
-
       formData.append("image", file);
-
       try {
         const res = await axios.post(
           "http://localhost:9000/api/post",
@@ -80,12 +74,12 @@ const ProfilePostSection = () => {
         );
         console.log(res, "response");
         action.resetForm();
+        handleClose()
       } catch (err) {
         console.log(err);
       }
     },
   });
-
   return (
     <>
       <Container>
@@ -210,7 +204,6 @@ const ProfilePostSection = () => {
                     }
                   />
                 </Grid>
-
                 <Grid
                   item
                   xl={12}
@@ -243,5 +236,4 @@ const ProfilePostSection = () => {
     </>
   );
 };
-
 export default ProfilePostSection;

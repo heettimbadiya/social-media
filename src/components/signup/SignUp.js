@@ -7,11 +7,11 @@ import logo from "../../assets/images/signup/download.png";
 import * as Yup from "yup";
 import axios from "axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function SignUp() {
   const theme = useTheme();
-
+  const navigate = useNavigate();
   const initialValues = {
     first_name: "",
     last_name: "",
@@ -36,8 +36,8 @@ function SignUp() {
     return axios
       .post("http://localhost:9000/auth/register", values)
       .then((response) => {
-        console.log(response.data);
         action.resetForm();
+        navigate("/login")
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -194,7 +194,11 @@ function SignUp() {
                 </Formik>
                 <Box textAlign={"center"}>
                   <Typography fontSize={14} mb={2}>
-                    Don't have an account? <NavLink to={"/login"} style={{color:"blue"}}> Sign In</NavLink>
+                    Don't have an account?{" "}
+                    <NavLink to={"/login"} style={{ color: "blue" }}>
+                      {" "}
+                      Sign In
+                    </NavLink>
                   </Typography>
                 </Box>
                 <hr />
