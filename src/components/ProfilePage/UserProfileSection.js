@@ -20,7 +20,7 @@ import useGetCurrentUser from "../../hooks/useGetCurrentUser";
 const UserProfileSection = () => {
   const theme = useTheme();
   const user = JSON.parse(localStorage.getItem("user"));
-  const { data: jdu } = useGetCurrentUser(user.id);
+  const { data: jdu } = useGetCurrentUser(user?.id);
   console.log("jadu", jdu);
   const data = jdu?.data
   const [anchorEl, setAnchorEl] = useState(null);

@@ -14,11 +14,13 @@ import logo from "../../assets/images/Login/download.png";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { NavLink } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 function LoginFrom() {
   const theme = useTheme();
   const navigate = useNavigate();
-
+ const handleToster = () => toast.success("Login Successfully");
+ const handleTosterRejact = () => toast.error("Login Successfully");
   const initialValues = {
     user_name: "",
     password: "",
@@ -40,9 +42,11 @@ function LoginFrom() {
         localStorage.setItem("token", JSON.stringify(authToken));
         action.resetForm();
         navigate("/");
+        handleToster()
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        handleTosterRejact()
       });
   };
 
@@ -149,6 +153,7 @@ function LoginFrom() {
                           type="submit"
                           sx={{ width: "100%", borderRadius: "50px " }}
                           variant="contained"
+                          onClick={handleToster}
                         >
                           Login
                         </Button>
@@ -157,7 +162,11 @@ function LoginFrom() {
                   </Formik>
                   <Box textAlign={"center"}>
                     <Typography fontSize={14} mb={2}>
-                      Don't have an account? <NavLink to={"/sign-up"} style={{color:"blue"}}> Sign up</NavLink>
+                      Don't have an account?{" "}
+                      <NavLink to={"/sign-up"} style={{ color: "blue" }}>
+                        {" "}
+                        Sign up
+                      </NavLink>
                     </Typography>
                   </Box>
                   <hr />
@@ -199,6 +208,7 @@ function LoginFrom() {
             </Grid>
           </Grid>
         </Grid>
+        <ToastContainer />
       </div>
     </>
   );

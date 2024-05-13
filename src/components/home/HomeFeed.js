@@ -1,4 +1,4 @@
-import { Avatar, Box, Grid, useTheme } from "@mui/material";
+import { Avatar, Box, Button, Grid, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -15,10 +15,10 @@ const HomeFeed = () => {
   const theme = useTheme();
   const [icon, setIcon] = useState(false);
   const [posts, setPosts] = useState([]);
-
-  const handleToster = () => toast.success("Wow so easy!");
+  const [follow, setUnFollow] = useState(false);
 
   const token = JSON.parse(localStorage.getItem("token"));
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     fetchAllPosts();
@@ -33,16 +33,30 @@ const HomeFeed = () => {
       });
   }
 
-  function handleclick(postid) {
-    setIcon(!icon);
-    return axios
-      .post(`http://localhost:9000/api/post/${postid}`, null, {
-        headers: { auth: token },
-      })
-      .then((response) => fetchAllPosts())
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+function handleclick(postid) {
+  axios
+    .post(`http://localhost:9000/api/post/${postid}`, null, {
+      headers: { auth: token },
+    })
+    .then((response) => {
+      if (response.data.is_like === 1) {
+        setIcon(true);
+        fetchAllPosts();
+      } else {
+        setIcon(false);
+        fetchAllPosts();
+      }
+    })
+    .catch((error) => {
+      console.error("Error liking/unliking post:", error);
+    });
+}
+
+  function followers(follow) {
+    console.log("follow", follow);
+    // axios.post(`http://localhost:9000/api/user/${follow}`, null, {
+    //   headers: { auth: token },
+    // });
   }
   return (
     <>
@@ -101,14 +115,34 @@ const HomeFeed = () => {
                         {res.description}
                       </Box>
                     </Box>
-                    <Box>
-                      <MoreHorizIcon
-                        sx={{
-                          color: theme.palette.black,
-                          fontSize: "30px",
-                          cursor: "pointer",
-                        }}
-                      />
+                    <Box sx={{ display: "flex" }}>
+                      <Box>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            color: "black",
+                            borderColor: "black",
+                            marginRight: "10px",
+                            textTransform: "unset",
+                            }}
+                          onClick={() => {
+                            followers(user.id);
+                            setUnFollow(!follow);
+                          }}
+                        >
+                          {follow ? "Unfollow" : "Follow"}
+                        </Button>
+                      </Box>
+                      <Box>
+                        {" "}
+                        <MoreHorizIcon
+                          sx={{
+                            color: theme.palette.black,
+                            fontSize: "30px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </Box>
                     </Box>
                   </Box>
                   <Grid

@@ -23,11 +23,11 @@ const style = {
   left: "50%",
   border: "unset !important",
   transform: "translate(-50%, -50%)",
+  width: { xs: "100%", sm: "60%", md: "50%" },
   bgcolor: "white",
   boxShadow: 24,
   p: 4,
 };
-
 const ProfilePostSection = () => {
   const theme = useTheme();
   const loginUser = JSON.parse(localStorage.getItem("token"));
@@ -35,7 +35,6 @@ const ProfilePostSection = () => {
   const [file, setFile] = useState();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   const fileInputRef = useRef(null);
   const handleImageClick = () => {
     fileInputRef.current.click();
@@ -44,12 +43,10 @@ const ProfilePostSection = () => {
     const file = event.target.files[0];
     setFile(file);
   };
-
   const initialValues = {
     description: "",
     caption: "",
   };
-
   const validationSchema = object({
     caption: string().required("Title is required"),
     description: string().required("Description is required"),
@@ -62,9 +59,7 @@ const ProfilePostSection = () => {
       formData.append("caption", values.caption);
       formData.append("description", values.description);
       // Add more fields as needed
-
       formData.append("image", file);
-
       try {
         const res = await axios.post(
           "http://localhost:9000/api/post",
@@ -78,12 +73,12 @@ const ProfilePostSection = () => {
         );
         console.log(res, "response");
         action.resetForm();
+        handleClose()
       } catch (err) {
         console.log(err);
       }
     },
   });
-
   return (
     <>
       <Container>
@@ -100,12 +95,12 @@ const ProfilePostSection = () => {
           <Typography onClick={handleOpen}>Create Your Post</Typography>
         </Box>
         <Modal
-          size={{ xs: "sm" }}
+          // size={{ xs: "sm" }}
           keepMounted
           open={open}
           onClose={handleClose}
-          width={800}
-          // sx={{ width: { md: "800px", xs: "100%" } }}
+          // width={"100%"}
+          sx={{ width: "100%" }}
         >
           <Box sx={style}>
             <IconButton
@@ -152,7 +147,7 @@ const ProfilePostSection = () => {
                   },
                 }}
               >
-                <Grid item xl={12} lg={12} md={6} sm={6} xs={12}>
+                <Grid item xs={12}>
                   <Box type="file">
                     <img
                       src={img} // Replace with your image path
@@ -169,7 +164,7 @@ const ProfilePostSection = () => {
                     />
                   </Box>
                 </Grid>
-                <Grid item xl={12} lg={12} md={6} sm={6} xs={12}>
+                <Grid item xs={12}>
                   <TextField
                     label="Title"
                     variant="outlined"
@@ -186,7 +181,7 @@ const ProfilePostSection = () => {
                     helperText={formik.touched.caption && formik.errors.caption}
                   />
                 </Grid>
-                <Grid item xl={12} lg={12} md={6} sm={6} xs={12}>
+                <Grid item xs={12}>
                   <TextField
                     label="Description"
                     variant="outlined"
@@ -208,7 +203,6 @@ const ProfilePostSection = () => {
                     }
                   />
                 </Grid>
-
                 <Grid
                   item
                   xl={12}
@@ -241,5 +235,4 @@ const ProfilePostSection = () => {
     </>
   );
 };
-
 export default ProfilePostSection;
