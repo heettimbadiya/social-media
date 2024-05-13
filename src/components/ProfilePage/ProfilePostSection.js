@@ -75,7 +75,7 @@ const ProfilePostSection = () => {
         );
         handleClose()
         action.resetForm();
-        toast.success("Login Successfully");
+        toast.success("Poat Added Successfully");
       } catch (err) {
         console.log(err);
         toast.error("Please Try Again");
