@@ -1,21 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  Grid,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-  useTheme,
+    Box,
+    Button,
+    Container,
+    Grid,
+    IconButton,
+    Menu,
+    MenuItem,
+    Typography,
+    useTheme,
 } from "@mui/material";
 import avatar from "../../assets/images/profileSection/userAvatar/useravatar.jpg";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import axios from "axios";
 import useGetCurrentUser from "../../hooks/useGetCurrentUser";
 import EditProfileModal from "./EditProfileModal";
 const UserProfileSection = () => {
@@ -275,10 +272,13 @@ const UserProfileSection = () => {
           </Grid>
           <Box sx={{ display: { xs: "block", md: "none" } }}>
             <Box
-              sx={{
-                fontWeight: "500",
-                mb: "3px",
-              }}
+                sx={{
+                    display: {md: "none", xs: "flex"},
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    p: "10px",
+                    borderBottom: `1px solid ${theme.palette.darkGrayBack}`,
+                }}
             >
               {data?.first_name} {data?.last_name}
             </Box>

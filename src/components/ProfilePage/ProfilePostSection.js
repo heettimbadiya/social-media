@@ -17,6 +17,7 @@ import { useFormik } from "formik";
 import { string, object } from "yup";
 import img from "../../assets/images/profileSection/img_upload..jpg";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -71,15 +72,19 @@ const ProfilePostSection = () => {
           })
           .then((res) => console.log(res))
           .catch((err) => console.log(err));
+        handleClose()
         action.resetForm();
-        handleClose();
+        toast.success("Poat Added Successfully");
       } catch (err) {
         console.log(err);
+        toast.error("Please Try Again");
       }
     },
   });
+  console.log(open);
   return (
     <>
+      <ToastContainer />
       <Container>
         <Box
           sx={{
