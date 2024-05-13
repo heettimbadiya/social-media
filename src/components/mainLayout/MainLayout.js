@@ -106,7 +106,7 @@ export default function   MainLayout() {
           setOpen={setOpen}
         />
       </Box>
-      <Main open={open} sx={{mt:{md:"0",xs:"40px"}}}>
+      <Main open={open} sx={{mt:{md:"0",xs:"40px"},p: "0"}}>
         <QueryClientProvider client={queryClient}>
           <Routes>
             <Route path="/" element={<Home />} />

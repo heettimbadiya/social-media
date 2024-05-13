@@ -17,19 +17,24 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import axios from "axios";
 import useGetCurrentUser from "../../hooks/useGetCurrentUser";
+import EditProfileModal from "./EditProfileModal";
 const UserProfileSection = () => {
   const theme = useTheme();
   const user = JSON.parse(localStorage.getItem("user"));
   const { data: jdu } = useGetCurrentUser(user.id);
   console.log("jadu", jdu);
-  const data = jdu?.data
+  const data = jdu?.data;
   const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   console.log("User : ", data);
   return (
     <>
@@ -85,7 +90,7 @@ const UserProfileSection = () => {
         <Container>
           <Grid
             container
-            sx={{ p: { md: "50px", xs: "20px" }, alignItems: "center" }}
+            sx={{ p: { lg: "50px", sm: "20px" }, alignItems: "center" , marginBlock : {sm: "0",xs: "15px"}}}
           >
             <Grid
               item
@@ -142,12 +147,14 @@ const UserProfileSection = () => {
                   <Box
                     sx={{ textAlign: "center", fontSize: "16px", mx: "18px" }}
                   >
-                    <Box sx={{ fontWeight: "500" }}>{data?.follower_count}</Box>
+                    <Box sx={{ fontWeight: "500" }}>
+                      {data?.follower_count}{" "}
+                    </Box>
                     <Box>Followers</Box>
                   </Box>
                   <Box sx={{ textAlign: "center", fontSize: "16px" }}>
                     <Box sx={{ fontWeight: "500" }}>
-                      {data?.following_count}
+                      {data?.following_count}{" "}
                     </Box>
                     <Box>Following</Box>
                   </Box>
@@ -161,6 +168,7 @@ const UserProfileSection = () => {
                   }}
                 >
                   <Button
+                    onClick={handleOpen}
                     sx={{
                       textTransform: "unset",
                       color: theme.palette.black,
@@ -216,13 +224,13 @@ const UserProfileSection = () => {
                 </Box>
                 <Box sx={{ ml: "30px" }}>
                   <Typography sx={{ fontWeight: "500" }} component={"span"}>
-                    {data?.follower_count}
+                    {data?.follower_count}{" "}
                   </Typography>
                   Followers
                 </Box>
                 <Box sx={{ ml: "30px" }}>
                   <Typography sx={{ fontWeight: "500" }} component={"span"}>
-                    {data?.following_count}
+                    {data?.following_count}{" "}
                   </Typography>
                   Following
                 </Box>
@@ -235,7 +243,7 @@ const UserProfileSection = () => {
                     mt: { md: "25px", xs: "15px" },
                   }}
                 >
-                  {data?.user_name}
+                  {data?.first_name}
                 </Box>
                 <Box>
                   JAI SHREERAM
@@ -251,7 +259,7 @@ const UserProfileSection = () => {
                 mb: "3px",
               }}
             >
-              {data?.user_name}
+              {data?.first_name}
             </Box>
             <Box>
               JAI SHREERAM :triangular_flag_on_post::triangular_flag_on_post:
@@ -266,6 +274,7 @@ const UserProfileSection = () => {
             }}
           >
             <Button
+                 onClick={handleOpen}
               sx={{
                 textTransform: "unset",
                 color: theme.palette.black,
@@ -304,6 +313,7 @@ const UserProfileSection = () => {
           </Box>
         </Container>
       </Box>
+      <EditProfileModal setOpen={setOpen} open={open} />
     </>
   );
 };

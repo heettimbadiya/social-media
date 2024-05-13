@@ -13,7 +13,7 @@ import axios from "axios";
 
 const HomeFeed = () => {
   const theme = useTheme();
-  const [icon, setIcon] = useState(false);
+  // const [icon, setIcon] = useState(false);
   const [posts, setPosts] = useState([]);
 
   const handleToster = () => toast.success("Wow so easy!");
@@ -27,19 +27,24 @@ const HomeFeed = () => {
   function fetchAllPosts() {
     axios
       .get("http://localhost:9000/api/post", { headers: { auth: token } })
-      .then((response) => setPosts(response?.data?.data))
+      .then((response) => {
+        setPosts(response?.data?.data);
+      })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
   }
 
   function handleclick(postid) {
-    setIcon(!icon);
+    // setIcon(!icon);
     return axios
       .post(`http://localhost:9000/api/post/${postid}`, null, {
         headers: { auth: token },
       })
-      .then((response) => fetchAllPosts())
+      .then((response) => {
+        console.log(response);
+        fetchAllPosts();
+      })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
@@ -156,9 +161,8 @@ const HomeFeed = () => {
                       }}
                     >
                       <Box>
-                        {icon ? (
+                        {res.is_liked == 0 ? (
                           <FavoriteIcon
-                            onClick={() => setIcon(!icon)}
                             sx={{
                               color: "#FF3040",
                               cursor: "pointer",
