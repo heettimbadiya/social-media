@@ -10,8 +10,9 @@ import Header from "../../components/sidebar/Header";
 import LoginFrom from "../Login/LoginFrom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import ProfilePic from "../../pages/ProfilePage/ProfilePic";
+import PrivateRout from "../../pages/PrivateRout/PrivateRout";
 
-export default function   MainLayout() {
+export default function MainLayout() {
   const drawerWidth = 300;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -79,7 +80,7 @@ export default function   MainLayout() {
         sx={{
           width: open ? { md: `calc(100% - ${drawerWidth}px)` } : "100%",
           ml: { sm: `${drawerWidth}px` },
-          display:{md:"none"},
+          display: { md: "none" },
           backgroundColor: "white",
         }}
       >
@@ -106,11 +107,13 @@ export default function   MainLayout() {
           setOpen={setOpen}
         />
       </Box>
-      <Main open={open} sx={{mt:{md:"0",xs:"40px"},p: "0"}}>
+      <Main open={open} sx={{ mt: { md: "0", xs: "40px" }, p: "0" }}>
         <QueryClientProvider client={queryClient}>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/profile" element={<ProfilePic />} />
+            <Route element={<PrivateRout />}>
+              <Route path="/" element={<ProfilePic />} />
+              {/* <Route path="/" element={<Home />} /> */}
+            </Route>
           </Routes>
         </QueryClientProvider>
       </Main>

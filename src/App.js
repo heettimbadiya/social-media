@@ -25,13 +25,10 @@ const App = () => {
     <>
       <QueryClientProvider client={queryClient}>
       <Routes>
-        {/* <Route element={<PrivateRout />}>
           <Route path="/" element={<MainLayout />} />
-        </Route> */}
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<LoginFrom />} />
       </Routes>
-      <MainLayout />
       </QueryClientProvider>
     </>
   );

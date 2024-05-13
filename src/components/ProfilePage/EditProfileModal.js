@@ -10,8 +10,9 @@ import { Box } from "@mui/system";
 import { useFormik } from "formik";
 import { string, object } from "yup";
 import CloseIcon from "@mui/icons-material/Close";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import img from "../../assets/images/profileSection/img_upload..jpg";
+import axios from "axios";
 
 const style = {
   position: "absolute",
@@ -25,17 +26,37 @@ const style = {
   p: 4,
 };
 
-const EditProfileModal = ({ setOpen, open }) => {
+const EditProfileModal = ({
+  setOpen,
+  open,
+  user,
+  currentUser,
+  onProfileUpdate,
+}) => {
   const [file, setFile] = useState();
-
-  const initialValues = {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const [initialValues, setInitialValues] = useState({
     first_name: "",
     email: "",
     last_name: "",
     user_name: "",
     contact: "",
     bio: "",
-  };
+  });
+
+  useEffect(() => {
+    if (currentUser) {
+      setInitialValues({
+        first_name: currentUser.data.first_name,
+        email: currentUser.data.email,
+        last_name: currentUser.data.last_name,
+        user_name: currentUser.data.user_name,
+        contact: currentUser.data.contact,
+        bio: currentUser.data.bio,
+      });
+    }
+  }, [currentUser]);
+
   const fileInputRef = useRef(null);
   const handleImageClick = () => {
     fileInputRef.current.click();
@@ -59,10 +80,12 @@ const EditProfileModal = ({ setOpen, open }) => {
 
   const formik = useFormik({
     initialValues,
+    enableReinitialize: true,
     validationSchema,
+
     onSubmit: async (values, action) => {
       const formData = new FormData();
-      console.log(values);
+
       formData.append("user_name", values.user_name);
       formData.append("first_name", values.first_name);
       formData.append("last_name", values.last_name);
@@ -72,22 +95,18 @@ const EditProfileModal = ({ setOpen, open }) => {
       formData.append("profile_pic", file);
 
       console.log("Formdata : ", formData);
-      // formData.append("description", values.description);
-      // Add more fields as needed
 
       try {
-        // const res = await axios.post(
-        //   "http://localhost:9000/api/post",
-        //   formData,
-        //   {
-        //     headers: {
-        //       "Content-Type": "multipart/form-data",
-        //       auth: loginUser,
-        //     },
-        //   }
-        // );
-        // console.log(res, "response");
-        // action.resetForm();
+        const res = await axios
+          .put(`http://localhost:9000/api/user/${user.id}`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              auth: token,
+            },
+          })
+          .then((res) =>  onProfileUpdate())
+          .catch((err) => console.log(err));
+        action.resetForm();
       } catch (err) {
         console.log(err);
       }
@@ -154,7 +173,7 @@ const EditProfileModal = ({ setOpen, open }) => {
               <Grid item xs={12}>
                 <Box type="file" sx={{ textAlign: "center" }}>
                   <img
-                    src={img} // Replace with your image path
+                    src={img}
                     alt="Upload Image"
                     onClick={handleImageClick}
                     style={{ cursor: "pointer", maxWidth: "200px" }}
@@ -162,6 +181,7 @@ const EditProfileModal = ({ setOpen, open }) => {
                   <input
                     type="file"
                     accept="image/*"
+                    name="profile_pic"
                     ref={fileInputRef}
                     onChange={handleFileChange}
                     style={{ display: "none" }}
@@ -173,7 +193,7 @@ const EditProfileModal = ({ setOpen, open }) => {
                   label="Username"
                   variant="outlined"
                   name="user_name"
-                  value={formik.values.user_name}
+                  value={formik.values?.user_name}
                   onChange={formik.handleChange}
                   fullWidth
                   inputlabelprops={{
@@ -290,6 +310,7 @@ const EditProfileModal = ({ setOpen, open }) => {
                 <Button
                   type="submit"
                   variant="contained"
+                  onClick={handleClose}
                   sx={{
                     backgroundColor: "#5559CE",
                     color: "#fff",

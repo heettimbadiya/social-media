@@ -24,7 +24,7 @@ const style = {
   left: "50%",
   border: "unset !important",
   transform: "translate(-50%, -50%)",
-  width: {xs: "100%",sm: "60%",md: "50%"},
+  width: { xs: "100%", sm: "60%", md: "50%" },
   bgcolor: "white",
   boxShadow: 24,
   p: 4,
@@ -59,22 +59,20 @@ const ProfilePostSection = () => {
       const formData = new FormData();
       formData.append("caption", values.caption);
       formData.append("description", values.description);
-      // Add more fields as needed
+
       formData.append("image", file);
       try {
-        const res = await axios.post(
-          "http://localhost:9000/api/post",
-          formData,
-          {
+        const res = await axios
+          .post("http://localhost:9000/api/post", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
               auth: loginUser,
             },
-          }
-        );
-        console.log(res, "response");
+          })
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
         action.resetForm();
-        handleClose()
+        handleClose();
       } catch (err) {
         console.log(err);
       }
@@ -101,7 +99,7 @@ const ProfilePostSection = () => {
           open={open}
           onClose={handleClose}
           // width={"100%"}
-          sx={{ width: "100%"}}
+          sx={{ width: "100%" }}
         >
           <Box sx={style}>
             <IconButton
@@ -148,10 +146,10 @@ const ProfilePostSection = () => {
                   },
                 }}
               >
-                <Grid item xs={12} >
+                <Grid item xs={12}>
                   <Box type="file">
                     <img
-                      src={img} 
+                      src={img}
                       alt="Upload Image"
                       onClick={handleImageClick}
                       style={{ cursor: "pointer", maxWidth: "200px" }}

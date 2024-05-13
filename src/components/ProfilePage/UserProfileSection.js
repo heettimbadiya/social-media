@@ -21,11 +21,12 @@ import EditProfileModal from "./EditProfileModal";
 const UserProfileSection = () => {
   const theme = useTheme();
   const user = JSON.parse(localStorage.getItem("user"));
-  const { data: jdu } = useGetCurrentUser(user?.id);
-  console.log("jadu", jdu);
-  const data = jdu?.data;
+  const { data: currentUser, refetch } = useGetCurrentUser(user?.id);
+  const data = currentUser?.data;
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
+  const [imgUrl, setImgUrl] = useState("");
+
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -35,7 +36,26 @@ const UserProfileSection = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  console.log("User : ", data);
+  const handleProfileUpdate = () => {
+    refetch();
+  };
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  useEffect(() => {
+    if (!data) {
+      setImgUrl("");
+    } else {
+      const url = data?.profile_pic;
+      const finalUrl = url && url.split("\\");
+      setImgUrl(
+        `${process.env.REACT_APP_API_URL}/${finalUrl[1]}/${finalUrl[2]}`
+      );
+    }
+  }, [data,refetch]);
+
   return (
     <>
       <Box
@@ -90,7 +110,11 @@ const UserProfileSection = () => {
         <Container>
           <Grid
             container
-            sx={{ p: { lg: "50px", sm: "20px" }, alignItems: "center" , marginBlock : {sm: "0",xs: "15px"}}}
+            sx={{
+              p: { lg: "50px", sm: "20px" },
+              alignItems: "center",
+              marginBlock: { sm: "0", xs: "15px" },
+            }}
           >
             <Grid
               item
@@ -108,7 +132,7 @@ const UserProfileSection = () => {
                 }}
               >
                 <img
-                  src={avatar}
+                  src={imgUrl}
                   alt="error"
                   style={{
                     borderRadius: "50%",
@@ -243,12 +267,9 @@ const UserProfileSection = () => {
                     mt: { md: "25px", xs: "15px" },
                   }}
                 >
-                  {data?.first_name}
+                  {data?.first_name} {data?.last_name}
                 </Box>
-                <Box>
-                  JAI SHREERAM
-                  :triangular_flag_on_post::triangular_flag_on_post:
-                </Box>
+                <Box>{data?.bio}</Box>
               </Box>
             </Grid>
           </Grid>
@@ -259,11 +280,9 @@ const UserProfileSection = () => {
                 mb: "3px",
               }}
             >
-              {data?.first_name}
+              {data?.first_name} {data?.last_name}
             </Box>
-            <Box>
-              JAI SHREERAM :triangular_flag_on_post::triangular_flag_on_post:
-            </Box>
+            <Box>{data?.bio}</Box>
           </Box>
           <Box
             sx={{
@@ -274,7 +293,7 @@ const UserProfileSection = () => {
             }}
           >
             <Button
-                 onClick={handleOpen}
+              onClick={handleOpen}
               sx={{
                 textTransform: "unset",
                 color: theme.palette.black,
@@ -313,7 +332,13 @@ const UserProfileSection = () => {
           </Box>
         </Container>
       </Box>
-      <EditProfileModal setOpen={setOpen} open={open} />
+      <EditProfileModal
+        setOpen={setOpen}
+        open={open}
+        currentUser={currentUser}
+        user={user}
+        onProfileUpdate={handleProfileUpdate}
+      />
     </>
   );
 };
