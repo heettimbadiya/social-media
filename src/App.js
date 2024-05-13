@@ -5,6 +5,8 @@ import ProfilePic from "./pages/ProfilePage/ProfilePic";
 import { QueryClient, QueryClientProvider } from "react-query";
 import MainLayout from "./components/mainLayout/MainLayout";
 import { Route, Routes } from "react-router";
+import Home from "./pages/Home/Home";
+import PrivateRout from "./pages/PrivateRout/PrivateRout";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,15 +20,18 @@ const queryClient = new QueryClient({
 
 const App = () => {
   const token = localStorage.getItem("token") || [];
-  
+
   return (
     <>
-      <Routes>
-        <Route path="/login" element={<LoginFrom />} />
-        <Route path="/" element={<MainLayout />} />
-      </Routes>
       <QueryClientProvider client={queryClient}>
-        <ProfilePic />
+      <Routes>
+        {/* <Route element={<PrivateRout />}>
+          <Route path="/" element={<MainLayout />} />
+        </Route> */}
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/login" element={<LoginFrom />} />
+      </Routes>
+      <MainLayout />
       </QueryClientProvider>
     </>
   );

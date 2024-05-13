@@ -17,21 +17,20 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import axios from "axios";
 import useGetCurrentUser from "../../hooks/useGetCurrentUser";
-
 const UserProfileSection = () => {
   const theme = useTheme();
-  const { data } = useGetCurrentUser(2);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const { data: jdu } = useGetCurrentUser(user.id);
+  console.log("jadu", jdu);
+  const data = jdu?.data
   const [anchorEl, setAnchorEl] = useState(null);
-
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
   console.log("User : ", data);
-
   return (
     <>
       <Box
@@ -49,7 +48,7 @@ const UserProfileSection = () => {
             alignItems: "center",
           }}
         >
-          heet_timbadiya_{" "}
+          {data?.user_name}
           <Typography
             sx={{
               display: "flex",
@@ -77,17 +76,30 @@ const UserProfileSection = () => {
           </Menu>
         </Box>
       </Box>
-      <Box sx={{borderBottom: `1px solid ${theme.palette.darkGrayBack}`,pb: "30px"}}>
+      <Box
+        sx={{
+          borderBottom: `1px solid ${theme.palette.darkGrayBack}`,
+          pb: "30px",
+        }}
+      >
         <Container>
           <Grid
             container
             sx={{ p: { md: "50px", xs: "20px" }, alignItems: "center" }}
           >
-            <Grid item xs={4}>
+            <Grid
+              item
+              xs={4}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <Box
                 sx={{
-                  textAlign: { md: "center", xs: "start" },
                   height: { sm: "150px", xs: "95px" },
+                  width: { sm: "150px", xs: "95px" },
                 }}
               >
                 <img
@@ -114,13 +126,13 @@ const UserProfileSection = () => {
                     display: { md: "block", xs: "none" },
                   }}
                 >
-                  heet_timbadiya_
+                  {data?.user_name}
                 </Typography>
                 <Box
                   sx={{
                     display: { xs: "flex", md: "none" },
-                                      justifyContent: { sm: "start", xs: "center" },
-                    ml: "5px"
+                    justifyContent: { sm: "start", xs: "center" },
+                    ml: "5px",
                   }}
                 >
                   <Box sx={{ textAlign: "center", fontSize: "16px" }}>
@@ -130,13 +142,13 @@ const UserProfileSection = () => {
                   <Box
                     sx={{ textAlign: "center", fontSize: "16px", mx: "18px" }}
                   >
-                    <Box sx={{ fontWeight: "500" }}>239</Box>
+                    <Box sx={{ fontWeight: "500" }}>{data?.follower_count}</Box>
                     <Box>Followers</Box>
                   </Box>
-                  <Box
-                    sx={{ textAlign: "center", fontSize: "16px" }}
-                  >
-                    <Box sx={{ fontWeight: "500" }}>249</Box>
+                  <Box sx={{ textAlign: "center", fontSize: "16px" }}>
+                    <Box sx={{ fontWeight: "500" }}>
+                      {data?.following_count}
+                    </Box>
                     <Box>Following</Box>
                   </Box>
                 </Box>
@@ -204,13 +216,13 @@ const UserProfileSection = () => {
                 </Box>
                 <Box sx={{ ml: "30px" }}>
                   <Typography sx={{ fontWeight: "500" }} component={"span"}>
-                    239{" "}
+                    {data?.follower_count}
                   </Typography>
                   Followers
                 </Box>
                 <Box sx={{ ml: "30px" }}>
                   <Typography sx={{ fontWeight: "500" }} component={"span"}>
-                    249{" "}
+                    {data?.following_count}
                   </Typography>
                   Following
                 </Box>
@@ -223,9 +235,12 @@ const UserProfileSection = () => {
                     mt: { md: "25px", xs: "15px" },
                   }}
                 >
-                  Heet Timbadiya
+                  {data?.user_name}
                 </Box>
-                <Box>JAI SHREERAM 🚩🚩</Box>
+                <Box>
+                  JAI SHREERAM
+                  :triangular_flag_on_post::triangular_flag_on_post:
+                </Box>
               </Box>
             </Grid>
           </Grid>
@@ -236,9 +251,11 @@ const UserProfileSection = () => {
                 mb: "3px",
               }}
             >
-              Heet Timbadiya
+              {data?.user_name}
             </Box>
-            <Box>JAI SHREERAM 🚩🚩</Box>
+            <Box>
+              JAI SHREERAM :triangular_flag_on_post::triangular_flag_on_post:
+            </Box>
           </Box>
           <Box
             sx={{
@@ -290,5 +307,4 @@ const UserProfileSection = () => {
     </>
   );
 };
-
 export default UserProfileSection;

@@ -30,8 +30,8 @@ const style = {
 
 const ProfilePostSection = () => {
   const theme = useTheme();
-
-  const [open, setOpen] = React.useState(false);
+  const loginUser = JSON.parse(localStorage.getItem("token"));
+  const [open, setOpen] = useState(false);
   const [file, setFile] = useState();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -57,12 +57,30 @@ const ProfilePostSection = () => {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values, action) => {
-        console.log("value", { ...values, post_image: file });
-    //   axios
-    //     .post(`http://localhost:9000/api/post`, { ...values, post_image: file })
-    //     .then((res) => console.log(res).catch((err) => console.log(err)));
-      action.resetForm();
+    onSubmit: async (values, action) => {
+      const formData = new FormData();
+      formData.append("caption", values.caption);
+      formData.append("description", values.description);
+      // Add more fields as needed
+
+      formData.append("image", file);
+
+      try {
+        const res = await axios.post(
+          "http://localhost:9000/api/post",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              auth: loginUser,
+            },
+          }
+        );
+        console.log(res, "response");
+        action.resetForm();
+      } catch (err) {
+        console.log(err);
+      }
     },
   });
 
@@ -108,7 +126,11 @@ const ProfilePostSection = () => {
             >
               Create Your Post
             </Typography>
-            <form onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
+            <form
+              onSubmit={formik.handleSubmit}
+              onReset={formik.handleReset}
+              encType="multipart/form-data"
+            >
               <Grid
                 container
                 spacing={2}
@@ -158,7 +180,9 @@ const ProfilePostSection = () => {
                     inputlabelprops={{
                       style: { color: "#5559CE" },
                     }}
-                    error={formik.touched.caption && Boolean(formik.errors.caption)}
+                    error={
+                      formik.touched.caption && Boolean(formik.errors.caption)
+                    }
                     helperText={formik.touched.caption && formik.errors.caption}
                   />
                 </Grid>

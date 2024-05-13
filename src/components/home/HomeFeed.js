@@ -26,10 +26,8 @@ const HomeFeed = () => {
 
   function fetchAllPosts() {
     axios
-      .get("http://localhost:9000/api/post")
-      .then((response) => {
-        setPosts(response?.data?.data);
-      })
+      .get("http://localhost:9000/api/post", { headers: { auth: token } })
+      .then((response) => setPosts(response?.data?.data))
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
@@ -41,16 +39,14 @@ const HomeFeed = () => {
       .post(`http://localhost:9000/api/post/${postid}`, null, {
         headers: { auth: token },
       })
-      .then((response) => {
-        fetchAllPosts();
-      })
+      .then((response) => fetchAllPosts())
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
   }
   return (
     <>
-      <Box py={"50px"}>
+      <Box>
         <Grid container justifyContent={"center"}>
           {posts?.map((res, ind) => {
             const url = res.post_image;
@@ -66,7 +62,7 @@ const HomeFeed = () => {
                 <Box
                   sx={{
                     borderBottom: "1px solid #00000026",
-                    width: { md: "500px" },
+                    width: { sm: "500px" },
                   }}
                 >
                   <Box
@@ -127,7 +123,7 @@ const HomeFeed = () => {
                     }}
                   >
                     <Grid item>
-                      <Box sx={{ height: "600px", width: { md: "400px" } }}>
+                      <Box sx={{ height: "600px", width: { sm: "400px" } }}>
                         <Avatar
                           alt="Remy Sharp"
                           src={`${process.env.REACT_APP_API_URL}/${finalUrl[1]}/${finalUrl[2]}`}

@@ -13,6 +13,7 @@ import * as Yup from "yup";
 import logo from "../../assets/images/Login/download.png";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { NavLink } from "react-router-dom";
 
 function LoginFrom() {
   const theme = useTheme();
@@ -156,7 +157,7 @@ function LoginFrom() {
                   </Formik>
                   <Box textAlign={"center"}>
                     <Typography fontSize={14} mb={2}>
-                      Don't have an account? <Link> Sign up</Link>
+                      Don't have an account? <NavLink to={"/sign-up"} style={{color:"blue"}}> Sign up</NavLink>
                     </Typography>
                   </Box>
                   <hr />

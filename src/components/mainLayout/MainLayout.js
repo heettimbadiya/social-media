@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import { styled, useTheme } from "@mui/material";
+import { CssBaseline, styled, useTheme } from "@mui/material";
 import Sidebar from "../sidebar/Sidebar";
-import { Route, Routes } from "react-router-dom";
-import Home from "../../pages/Home";
+import { Outlet, Route, Routes } from "react-router-dom";
+import Home from "../../pages/Home/Home";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Header from "../../components/sidebar/Header";
+import LoginFrom from "../Login/LoginFrom";
+import { QueryClient, QueryClientProvider } from "react-query";
+import ProfilePic from "../../pages/ProfilePage/ProfilePic";
 
-export default function MainLayout() {
+export default function   MainLayout() {
   const drawerWidth = 300;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -28,7 +31,15 @@ export default function MainLayout() {
       setMobileOpen(!mobileOpen);
     }
   };
-
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        retry: false,
+        staleTime: Infinity,
+      },
+    },
+  });
   const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== "open",
   })(({ theme, open }) => ({
@@ -68,6 +79,7 @@ export default function MainLayout() {
         sx={{
           width: open ? { md: `calc(100% - ${drawerWidth}px)` } : "100%",
           ml: { sm: `${drawerWidth}px` },
+          display:{md:"none"},
           backgroundColor: "white",
         }}
       >
@@ -94,10 +106,13 @@ export default function MainLayout() {
           setOpen={setOpen}
         />
       </Box>
-      <Main open={open}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
+      <Main open={open} sx={{mt:{md:"0",xs:"40px"}}}>
+        <QueryClientProvider client={queryClient}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<ProfilePic />} />
+          </Routes>
+        </QueryClientProvider>
       </Main>
     </Box>
   );
