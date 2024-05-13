@@ -17,6 +17,7 @@ import { useFormik } from "formik";
 import { string, object } from "yup";
 import img from "../../assets/images/profileSection/img_upload..jpg";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -72,16 +73,19 @@ const ProfilePostSection = () => {
             },
           }
         );
-        console.log(res, "response");
-        action.resetForm();
         handleClose()
+        action.resetForm();
+        toast.success("Login Successfully");
       } catch (err) {
         console.log(err);
+        toast.error("Please Try Again");
       }
     },
   });
+  console.log(open);
   return (
     <>
+      <ToastContainer />
       <Container>
         <Box
           sx={{
@@ -101,7 +105,7 @@ const ProfilePostSection = () => {
           open={open}
           onClose={handleClose}
           // width={"100%"}
-          sx={{ width: "100%"}}
+          sx={{ width: "100%" }}
         >
           <Box sx={style}>
             <IconButton
@@ -148,10 +152,10 @@ const ProfilePostSection = () => {
                   },
                 }}
               >
-                <Grid item xs={12} >
+                <Grid item xs={12}>
                   <Box type="file">
                     <img
-                      src={img} 
+                      src={img}
                       alt="Upload Image"
                       onClick={handleImageClick}
                       style={{ cursor: "pointer", maxWidth: "200px" }}

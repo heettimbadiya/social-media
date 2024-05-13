@@ -2,6 +2,8 @@ import {
   Box,
   Button,
   Grid,
+  IconButton,
+  InputAdornment,
   Link,
   TextField,
   Typography,
@@ -14,13 +16,15 @@ import logo from "../../assets/images/Login/download.png";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { NavLink } from "react-router-dom";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { ToastContainer, toast } from "react-toastify";
 
 function LoginFrom() {
   const theme = useTheme();
   const navigate = useNavigate();
- const handleToster = () => toast.success("Login Successfully");
- const handleTosterRejact = () => toast.error("Login Successfully");
+   const [showPassword, setShowPassword] = useState(false);
+  const handleTosterRejact = () => toast.error("Anauthorized");
   const initialValues = {
     user_name: "",
     password: "",
@@ -35,23 +39,28 @@ function LoginFrom() {
     return axios
       .post("http://localhost:9000/auth/login", values)
       .then((response) => {
-        console.log(response);
+    
+          toast.success("Login Successfully");
+
         const userData = response.data.data;
         const authToken = response.data.token;
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("token", JSON.stringify(authToken));
         action.resetForm();
-        navigate("/");
-        handleToster()
+        setTimeout(() => navigate("/"), 1000);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-        handleTosterRejact()
+        handleTosterRejact();
       });
   };
+   const handleShow = () => {
+     setShowPassword(!showPassword);
+   };
 
   return (
     <>
+      <ToastContainer />
       <div
         style={{
           height: "100vh",
@@ -85,7 +94,7 @@ function LoginFrom() {
                   alignItems: "center",
                 }}
               >
-                <Box>
+                <Box sx={{ width: "100%" }}>
                   <Box
                     sx={{
                       width: "48px",
@@ -133,27 +142,49 @@ function LoginFrom() {
                           />
                         }
                       />
-                      <Field
-                        as={TextField}
-                        fullWidth
-                        margin="normal"
-                        label="Password"
-                        type="password"
-                        variant="outlined"
-                        name="password"
-                        helperText={
-                          <ErrorMessage
-                            className="ErrorColor"
-                            name="password"
+                      <Typography sx={{ position: "relative" }}>
+                        <Field
+                          as={TextField}
+                          fullWidth
+                          margin="normal"
+                          label="Password"
+                          type={showPassword ? "text" : "password"}
+                          variant="outlined"
+                          name="password"
+                          helperText={
+                            <ErrorMessage
+                              className="ErrorColor"
+                              name="password"
+                            />
+                          }
+                        />
+                        {showPassword ? (
+                          <VisibilityOff
+                            onClick={handleShow}
+                            sx={{
+                              position: "absolute",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              right: "5%",
+                            }}
                           />
-                        }
-                      />
+                        ) : (
+                          <Visibility
+                            onClick={handleShow}
+                            sx={{
+                              position: "absolute",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              right: "5%",
+                            }}
+                          />
+                        )}
+                      </Typography>
                       <Box display="flex" justifyContent="center" my={3}>
                         <Button
                           type="submit"
                           sx={{ width: "100%", borderRadius: "50px " }}
                           variant="contained"
-                          onClick={handleToster}
                         >
                           Login
                         </Button>
@@ -208,7 +239,6 @@ function LoginFrom() {
             </Grid>
           </Grid>
         </Grid>
-        <ToastContainer />
       </div>
     </>
   );

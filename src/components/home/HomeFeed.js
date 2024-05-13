@@ -49,7 +49,7 @@ const HomeFeed = () => {
         console.error("Error fetching data:", error);
       });
   }
-    function followers(follow) {
+  function followers(follow) {
     console.log("follow", follow);
     // axios.post(`http://localhost:9000/api/user/${follow}`, null, {
     //   headers: { auth: token },
@@ -90,14 +90,25 @@ const HomeFeed = () => {
                         mb: "10px",
                       }}
                     >
-                      <Box>
+                      <Box >
+                        {/* <Avatar
+                          alt="Remy Sharp"
+                          src=
+                          sx={{
+                            height: "50px",
+                            width: "50px",
+                            borderRadius: "50% !important",
+                            objectFit: "contain !important",
+                          }}
+                        /> */}
                         <Avatar
                           alt="Remy Sharp"
                           src={`${process.env.REACT_APP_API_URL}/${finalUrl[1]}/${finalUrl[2]}`}
                           sx={{
-                            height: "50px",
-                            width: "50px",
+                            width: "56px",
+                            height: "56px",
                             borderRadius: "50%",
+                           
                           }}
                         />
                       </Box>
@@ -121,7 +132,7 @@ const HomeFeed = () => {
                             borderColor: "black",
                             marginRight: "10px",
                             textTransform: "unset",
-                            }}
+                          }}
                           onClick={() => {
                             followers(user.id);
                             setUnFollow(!follow);
@@ -155,18 +166,10 @@ const HomeFeed = () => {
                   >
                     <Grid item>
                       <Box sx={{ height: "600px", width: { sm: "400px" } }}>
-                        <Avatar
-                          alt="Remy Sharp"
-                          src={`${process.env.REACT_APP_API_URL}/${finalUrl[1]}/${finalUrl[2]}`}
-                          sx={{
-                            height: "100%",
-                            borderRadius: "unset",
-                            width: "100%",
-                          }}
-                        />
                         <img
-                          src="https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/How%20To%20Post%20on%20IG.jpg?width=595&height=400&name=How%20To%20Post%20on%20IG.jpg"
+                          src={`${process.env.REACT_APP_API_URL}/${finalUrl[1]}/${finalUrl[2]}`}
                           alt="img1"
+                          style={{ objectFit: "contain" }}
                         />
                       </Box>
                     </Grid>
