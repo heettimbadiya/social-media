@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import React, { useEffect, useRef, useState } from "react";
 import img from "../../assets/images/profileSection/img_upload..jpg";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -82,10 +83,8 @@ const EditProfileModal = ({
     initialValues,
     enableReinitialize: true,
     validationSchema,
-
     onSubmit: async (values, action) => {
       const formData = new FormData();
-
       formData.append("user_name", values.user_name);
       formData.append("first_name", values.first_name);
       formData.append("last_name", values.last_name);
@@ -97,17 +96,22 @@ const EditProfileModal = ({
       console.log("Formdata : ", formData);
 
       try {
-        const res = await axios
-          .put(`http://localhost:9000/api/user/${user.id}`, formData, {
+        const res = await axios.put(
+          `http://localhost:9000/api/user/${user.id}`,
+          formData,
+          {
             headers: {
               "Content-Type": "multipart/form-data",
               auth: token,
             },
-          })
-          .then((res) =>  onProfileUpdate())
-          .catch((err) => console.log(err));
+          }
+        );
+        toast.success("Profile Edit Successfully"); // Show success toaster
+        onProfileUpdate();
         action.resetForm();
+        handleClose();
       } catch (err) {
+        toast.error("Failed to Edit");
         console.log(err);
       }
     },
@@ -250,7 +254,6 @@ const EditProfileModal = ({
                 <TextField
                   label="Email"
                   variant="outlined"
-                  //   type="email"
                   name="email"
                   value={formik.values.email}
                   onChange={formik.handleChange}

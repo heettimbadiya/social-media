@@ -1,22 +1,24 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
-    Box,
-    Button,
-    Container,
-    Grid,
-    IconButton,
-    Menu,
-    MenuItem,
-    Typography,
-    useTheme,
+  Box,
+  Button,
+  Container,
+  Grid,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+  useTheme,
 } from "@mui/material";
 import avatar from "../../assets/images/profileSection/userAvatar/useravatar.jpg";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import useGetCurrentUser from "../../hooks/useGetCurrentUser";
 import EditProfileModal from "./EditProfileModal";
+import { useNavigate } from "react-router-dom";
 const UserProfileSection = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   const { data: currentUser, refetch } = useGetCurrentUser(user?.id);
   const data = currentUser?.data;
@@ -30,6 +32,12 @@ const UserProfileSection = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -41,17 +49,37 @@ const UserProfileSection = () => {
     refetch();
   }, []);
 
+  // useEffect(() => {
+  //   if (!data) {
+  //     setImgUrl("");
+  //   } else {
+  //     const url = data?.profile_pic;
+  //     const finalUrl = url && url.split("\\");
+  //     setImgUrl(
+  //       `${process.env.REACT_APP_API_URL}/${finalUrl[1]}/${finalUrl[2]}`
+  //     );
+  //   }
+  // }, [data, refetch]);
+
   useEffect(() => {
     if (!data) {
       setImgUrl("");
     } else {
       const url = data?.profile_pic;
-      const finalUrl = url && url.split("\\");
-      setImgUrl(
-        `${process.env.REACT_APP_API_URL}/${finalUrl[1]}/${finalUrl[2]}`
-      );
+      if (url) {
+        const finalUrl = url.split("\\");
+        if (finalUrl && finalUrl.length >= 3) {
+          setImgUrl(
+            `${process.env.REACT_APP_API_URL}/${finalUrl[1]}/${finalUrl[2]}`
+          );
+        } else {
+          console.error("Invalid URL format:", url);
+        }
+      } else {
+        console.error("Profile picture URL is null or undefined");
+      }
     }
-  }, [data,refetch]);
+  }, [data, refetch]);
 
   return (
     <>
@@ -227,7 +255,30 @@ const UserProfileSection = () => {
                   </Button>
                 </Box>
                 <Box sx={{ ml: "10px", display: { md: "block", xs: "none" } }}>
-                  <SettingsIcon />
+                  <Box>
+                    <IconButton onClick={handleMenuOpen}>
+                      <SettingsIcon />
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={handleMenuClose}
+                      PaperProps={{
+                        style: {
+                          width: "150px",
+                        },
+                      }}
+                    >
+                      <MenuItem
+                        onClick={() => {
+                          handleMenuClose();
+                          logout();
+                        }}
+                      >
+                        log out
+                      </MenuItem>
+                    </Menu>
+                  </Box>
                 </Box>
               </Box>
               <Box
@@ -272,13 +323,13 @@ const UserProfileSection = () => {
           </Grid>
           <Box sx={{ display: { xs: "block", md: "none" } }}>
             <Box
-                sx={{
-                    display: {md: "none", xs: "flex"},
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    p: "10px",
-                    borderBottom: `1px solid ${theme.palette.darkGrayBack}`,
-                }}
+              sx={{
+                display: { md: "none", xs: "flex" },
+                justifyContent: "space-between",
+                alignItems: "center",
+                p: "10px",
+                borderBottom: `1px solid ${theme.palette.darkGrayBack}`,
+              }}
             >
               {data?.first_name} {data?.last_name}
             </Box>

@@ -10,8 +10,6 @@ import Header from "../../components/sidebar/Header";
 import LoginFrom from "../Login/LoginFrom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import ProfilePic from "../../pages/ProfilePage/ProfilePic";
-import PrivateRout from "../../pages/PrivateRout/PrivateRout";
-
 export default function MainLayout() {
   const drawerWidth = 300;
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -22,11 +20,9 @@ export default function MainLayout() {
     setIsClosing(true);
     setMobileOpen(false);
   };
-
   const handleDrawerTransitionEnd = () => {
     setIsClosing(false);
   };
-
   const handleDrawerToggle = () => {
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
@@ -110,10 +106,8 @@ export default function MainLayout() {
       <Main open={open} sx={{ mt: { md: "0", xs: "40px" }, p: "0" }}>
         <QueryClientProvider client={queryClient}>
           <Routes>
-            <Route element={<PrivateRout />}>
-              <Route path="/" element={<ProfilePic />} />
-              {/* <Route path="/" element={<Home />} /> */}
-            </Route>
+            <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<ProfilePic />} />
           </Routes>
         </QueryClientProvider>
       </Main>
