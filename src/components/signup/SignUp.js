@@ -49,6 +49,8 @@ function SignUp() {
       });
   };
 
+  
+
   return (
     <>
       <ToastContainer />
